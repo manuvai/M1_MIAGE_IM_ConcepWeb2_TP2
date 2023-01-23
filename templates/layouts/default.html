@@ -10,7 +10,7 @@
     <header>
         <h2>Fonctionnalités</h2>
         <ul>
-            <li><a href="">Liste des congrès</a></li>
+            <li><a href="{{url_for("congres_list")}}">Liste des congrès</a></li>
             <li><a href="">Liste des participants</a></li>
             <li><a href="">Créer un compte participant</a></li>
             <li><a href="">Créer un compte participant (Requète paramétrée)</a></li>
@@ -18,7 +18,7 @@
             <li><a href="">Création d'un nouveau congrès (Requète paramétrée)</a></li>
             <li><a href="">S'inscrire à un congrès (Requète paramétrée pour l'insertion)</a></li>
         </ul>
-        <a href="">Retour à la page d'accueil</a>
+        <a href="{{url_for("index")}}">Retour à la page d'accueil</a>
     </header>
     {% block pageContent %}
     
