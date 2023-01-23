@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h2>Fonctionnalités</h2>
+        <ul>
+            <li><a href="">Liste des congrès</a></li>
+            <li><a href="">Liste des participants</a></li>
+            <li><a href="">Créer un compte participant</a></li>
+            <li><a href="">Créer un compte participant (Requète paramétrée)</a></li>
+            <li><a href="">Consultation des inscriptions</a></li>
+            <li><a href="">Création d'un nouveau congrès (Requète paramétrée)</a></li>
+            <li><a href="">S'inscrire à un congrès (Requète paramétrée pour l'insertion)</a></li>
+        </ul>
+        <a href="">Retour à la page d'accueil</a>
+    </header>
+    {% block pageContent %}
+    
+    {% endblock %}
+    <footer>
+        <hr>
+        &copy; Copyright 2030 by The site de gestion de congrès!
+    </footer>
+</body>
+</html>
