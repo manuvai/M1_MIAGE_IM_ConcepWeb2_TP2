@@ -42,8 +42,24 @@ def execute_read_query(connection: sqlite3.Connection, query: str) -> list:
 
   try:
     cursor = connection.cursor()
-    cursor.execute(query)
-    data = cursor.fetchall()
+    exec_data = cursor.execute(query)
+
+    data = []
+
+    column_names = []
+    for column in exec_data.description:
+      column_names.append(column[0])
+
+    temp_data = cursor.fetchall()
+    for row in temp_data:
+      query_data = {}
+      i = 0
+      for column_value in row:
+        column_name = column_names[i]
+        query_data[column_name] = column_value
+
+        i += 1
+      data.append(query_data)
 
   except sqlite3.Error as e:
     print(f"The error {e} occured")
