@@ -84,51 +84,32 @@ def execute_query(connection: sqlite3.Connection, query: str) -> list:
 
   except sqlite3.Error as e:
     print(f"The error {e} occured")
-
-def creer_congres(data: tuple) -> dict:
-  """Création d'une structure pour les congres
-
-  Args:
-      data (tuple): Les données sous forme de n-uplets
-
-  Returns:
-      dict: Le congres de retour
-  """
-  return {
-    'code': data[0],
-    'titre': data[1],
-    'edition': data[2],
-    'debut': data[3],
-    'fin': data[4],
-    'url': data[5],
-  }
-
-def test_insertion(connection: sqlite3.Connection) -> None:
-  query = """
-    INSERT INTO congres (codcongres, titrecongres, numeditioncongres, dtdebutcongres, dtfincongres, urlsitewebcongres)
-    VALUES (14, 'Un congres des MIAGE', 1, '2023-01-12', '2023-01-15', 'https://miage.ut-capitole.fr')
-  """
-  execute_query(connection, query)
-  
+ 
+@app.route("/index")
 @app.route("/")
 def index():
   return render_template('index.html')
 
-if (__name__ == '__main__'):
+@app.route("/congres")
+def congres_list():
+
+    db_path = './db/bd_congres.db'
+    connection = create_connection(db_path)
+  
     query = """
     SELECT *
     FROM congres
     """
 
-    db_path = './db/bd_congres.db'
-    connection = create_connection(db_path)
-    print(connection)
-    test_insertion(connection)
+    list_congres = execute_read_query(connection, query)
 
-    data = execute_read_query(connection, query)
-    for congres in data:
-        congres = creer_congres(congres)
-        print(congres)
+    column_names = []
+    if (len(list_congres) > 0):
+      column_names = list_congres[0].keys()
+
+    return render_template('congres/list.html', column_names=column_names, list_elements=list_congres)
+
+if (__name__ == '__main__'):
 
     host = '127.0.0.1'
     port = 5000
