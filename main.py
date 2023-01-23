@@ -109,6 +109,25 @@ def congres_list():
 
     return render_template('congres/list.html', column_names=column_names, list_elements=list_congres)
 
+@app.route("/participants")
+def participants_list():
+
+  db_path = './db/bd_congres.db'
+  connection = create_connection(db_path)
+
+  query = """
+  SELECT *
+  FROM participants
+  """
+
+  list_participants = execute_read_query(connection, query)
+
+  column_names = []
+  if (len(list_participants) > 0):
+    column_names = list_participants[0].keys()
+
+  return render_template('participants/list.html', column_names=column_names, list_elements=list_participants)
+
 if (__name__ == '__main__'):
 
     host = '127.0.0.1'
