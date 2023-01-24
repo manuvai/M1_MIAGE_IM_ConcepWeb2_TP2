@@ -80,33 +80,40 @@ def participants_new():
     errors = form_validate(request.form, keys_validation)
 
     is_valid = len(errors) == 0
-
     connection = get_connection()
-    
-    column_names = fetch_column_names(keys_validation)
-    column_names.append('DTINSCRIPTION')
-    columns = ', '.join(column_names)
 
-    x = datetime.datetime.now()
-    now_date = x.strftime("%Y-%m-%d")
+    is_already_registered = find_participant_by_email(connection, request.form.get('EMAILPART'))
+    if (len(is_already_registered) > 0):
+        is_valid = False
+        errors.append("L'utilisateur ayant pour email {} est déjà inscrit. Veuillez réessayer".format(request.form.get('EMAILPART')))
 
-    values = []
-    values.append(request.form.get('CODESTATUT'))
-    values.append("'{}'".format(request.form.get('NOMPART')))
-    values.append("'{}'".format(request.form.get('PRENOMPART')))
-    values.append("'{}'".format(request.form.get('ORGANISMEPART')))
-    values.append("'{}'".format(request.form.get('CPPART')))
-    values.append("'{}'".format(request.form.get('ADRPART')))
-    values.append("'{}'".format(request.form.get('VILLEPART')))
-    values.append("'{}'".format(request.form.get('PAYSPART')))
-    values.append("'{}'".format(request.form.get('EMAILPART')))
-    values.append("'{}'".format(now_date))
+    if (is_valid):
+        
+        
+        column_names = fetch_column_names(keys_validation)
+        column_names.append('DTINSCRIPTION')
+        columns = ', '.join(column_names)
 
-    values_str = ', '.join(values)
+        x = datetime.datetime.now()
+        now_date = x.strftime("%Y-%m-%d")
 
-    query = f"INSERT INTO participants ({columns}) VALUES ({values_str})"
+        values = []
+        values.append(request.form.get('CODESTATUT'))
+        values.append("'{}'".format(request.form.get('NOMPART')))
+        values.append("'{}'".format(request.form.get('PRENOMPART')))
+        values.append("'{}'".format(request.form.get('ORGANISMEPART')))
+        values.append("'{}'".format(request.form.get('CPPART')))
+        values.append("'{}'".format(request.form.get('ADRPART')))
+        values.append("'{}'".format(request.form.get('VILLEPART')))
+        values.append("'{}'".format(request.form.get('PAYSPART')))
+        values.append("'{}'".format(request.form.get('EMAILPART')))
+        values.append("'{}'".format(now_date))
 
-    execute_query(connection, query)
+        values_str = ', '.join(values)
+
+        query = f"INSERT INTO participants ({columns}) VALUES ({values_str})"
+
+        execute_query(connection, query)
 
     return render_template('participants/new.html', errors=errors, is_valid=is_valid)
 
@@ -127,6 +134,17 @@ def get_connection() -> sqlite3.Connection:
     connection = create_connection(db_path)
 
     return connection
+
+def find_participant_by_email(connection: sqlite3.Connection, email: str) -> dict|None:
+    query = """
+    SELECT *
+    FROM participants
+    WHERE EMAILPART = '{email}'
+    """
+    query = query.format(email=email)
+
+    return execute_read_query(connection, query)
+    
 
 def form_validate(form: any, keys_validation: dict) -> list:
     error_messages = []
