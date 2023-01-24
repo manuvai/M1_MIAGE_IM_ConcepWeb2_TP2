@@ -1,0 +1,47 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+<h1>Ajout d'un participant</h1>
+
+<form action="{{url_for("participants_new")}}" method="post">
+    <div>
+        {% for statut in list_statuts %}
+            <input type="radio" name="CODESTATUT" id="CODESTATUT_{{statut['CODESTATUT']}}" value="{{statut['CODESTATUT']}}">{{statut['NOMSTATUT']}}
+        {% endfor %}
+    </div>
+    <div>
+        <label for="NOMPART">Nom :</label>
+        <input type="text" name="NOMPART" id="NOMPART">
+    </div>
+    <div>
+        <label for="PRENOMPART">Prénom :</label>
+        <input type="text" name="PRENOMPART" id="PRENOMPART">
+    </div>
+    <div>
+        <label for="ORGANISMEPART">Organisme :</label>
+        <input type="text" name="ORGANISMEPART" id="ORGANISMEPART">
+    </div>
+    <div>
+        <label for="CPPART">Code Postal :</label>
+        <input type="number" name="CPPART" id="CPPART">
+    </div>
+    <div>
+        <label for="ADRPART">Adresse :</label>
+        <input type="text" name="ADRPART" id="ADRPART">
+    </div>
+    <div>
+        <label for="VILLEPART">Ville :</label>
+        <input type="text" name="VILLEPART" id="VILLEPART">
+    </div>
+    <div>
+        <label for="PAYSPART">Pays :</label>
+        <input type="text" name="PAYSPART" id="PAYSPART">
+    </div>
+    <div>
+        <label for="EMAILPART">E-mail :</label>
+        <input type="email" name="EMAILPART" id="EMAILPART">
+    </div>
+    <button type="submit">Créer</button>
+</form>
+
+{% endblock %}

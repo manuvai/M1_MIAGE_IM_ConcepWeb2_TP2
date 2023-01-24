@@ -1,0 +1,14 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+
+{% for error in errors %}
+    <div>{{error}}</div>
+
+{% endfor %}
+
+{% if is_valid %}
+    Le participant a bien été créé.
+{% endif %}
+
+{% endblock %}
