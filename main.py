@@ -117,6 +117,47 @@ def participants_new():
 
     return render_template('participants/new.html', errors=errors, is_valid=is_valid)
 
+@app.route("/inscriptions/search")
+def inscriptions_search():
+    return render_template('inscriptions/search.html')
+
+@app.route("/inscriptions/list", methods=["POST"])
+def inscriptions_list():
+    email = request.form.get('email')
+
+    query = """
+    SELECT c.*
+    FROM congres c, inscrire i, participants p
+    WHERE c.codCongres = i.codCongres
+        AND i.codParticipant = p.codParticipant
+        AND p.EMAILPART = '{}'
+    """
+
+    connection = get_connection()
+    list_congres = execute_read_query(connection, query.format(email))
+    
+    for congres in list_congres:
+        
+        query = """
+        SELECT t.*
+        FROM congres c, choix_thematiques ct, participants p, thematiques t
+        WHERE c.codCongres = ct.codCongres
+            AND ct.codParticipant = p.codParticipant
+            AND t.codeThematique = ct.codeThematique
+            AND p.EMAILPART = '{}'
+            AND c.codCongres = {}
+        """
+        query = query.format(email, congres['CODCONGRES'])
+        temp_list_thematiques = execute_read_query(connection, query)
+
+        list_thematiques = []
+        for thematique in temp_list_thematiques:
+            list_thematiques.append(thematique['NOMTHEMATIQUE'])
+        congres['THEMATIQUES'] = list_thematiques
+
+
+    return render_template('inscriptions/list.html', email=email, list_congres=list_congres)
+
 def fetch_column_names(keys_validation: dict) -> list:
     response = []
     for key in keys_validation.keys():

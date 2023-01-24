@@ -1,0 +1,28 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+<h1>Inscriptions de l'utilisateur {{email}}</h1>
+
+{% if list_congres %}
+    <ul>
+        {% for congres in list_congres %}
+        <li>
+            {{congres['TITRECONGRES']}}.<br>
+            {% if congres['THEMATIQUES'] %}
+                Thématiques abordées :
+                <ul>
+                    {% for thematique in congres['THEMATIQUES'] %}
+                        <li> {{thematique}} </li>
+
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+        
+    </ul>
+
+{% else %}
+    Aucun congrès pour l'utilisateur {{email}}
+{% endif %}
+{% endblock %}

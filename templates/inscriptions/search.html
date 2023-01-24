@@ -1,0 +1,13 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+<h1>Recherche de congrès d'un participant</h1>
+
+<form action="{{url_for("inscriptions_list")}}" method="post">
+    <div>
+        <label for="email">Veuillez renseigner l'email de l'utilisateur</label>
+        <input type="email" name="email" id="email">
+    </div>
+    <button type="submit">Rechercher</button>
+</form>
+{% endblock %}
