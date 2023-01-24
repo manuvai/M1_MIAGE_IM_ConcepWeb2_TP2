@@ -1,3 +1,4 @@
+import sqlite3
 from connection_db import create_connection, execute_query, execute_read_query
 from flask import Flask
 from flask import render_template
@@ -13,9 +14,7 @@ def index():
 
 @app.route("/congres")
 def congres_list():
-
-    db_path = './db/bd_congres.db'
-    connection = create_connection(db_path)
+    connection = get_connection()
 
     query = """
     SELECT *
@@ -33,9 +32,7 @@ def congres_list():
 
 @app.route("/participants")
 def participants_list():
-
-    db_path = './db/bd_congres.db'
-    connection = create_connection(db_path)
+    connection = get_connection()
 
     query = """
     SELECT *
@@ -50,6 +47,16 @@ def participants_list():
 
     return render_template('participants/list.html', column_names=column_names, list_elements=list_participants)
 
+def get_connection() -> sqlite3.Connection:
+    """Implémentation de la récupération de la BD commune
+
+    Returns:
+        sqlite3.Connection: La connection à la BD
+    """
+    db_path = './db/bd_congres.db'
+    connection = create_connection(db_path)
+
+    return connection
 
 if (__name__ == '__main__'):
 
