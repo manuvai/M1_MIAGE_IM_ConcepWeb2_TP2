@@ -61,7 +61,7 @@ def execute_read_query(connection: sqlite3.Connection, query: str) -> list:
 
   return data
 
-def execute_query(connection: sqlite3.Connection, query: str) -> list:
+def execute_query(connection: sqlite3.Connection, query: str) -> any:
   """Implémentation de la récupération de données à partir d'une requête
 
   Args:
@@ -74,8 +74,10 @@ def execute_query(connection: sqlite3.Connection, query: str) -> list:
 
   try:
     cursor = connection.cursor()
-    cursor.execute(query)
+    exec_data = cursor.execute(query)
     connection.commit()
+    return cursor.lastrowid
+
 
   except sqlite3.Error as e:
     print(f"The error {e} occured")

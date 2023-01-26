@@ -61,7 +61,7 @@ def congres_new():
         'NUMEDITIONCONGRES': ['required'],
         'DTDEBUTCONGRES': ['required'],
         'DTFINCONGRES': ['required'],
-        'URLSITECONGRES': ['required'],
+        'URLSITEWEBCONGRES': ['required'],
     }
     errors = form_validate(request.form, keys_validation)
 
@@ -70,11 +70,25 @@ def congres_new():
         activities_ids = request.form.getlist('CODESACTIVITES')
         thematiques_ids = request.form.getlist('CODESTHEMATIQUES')
 
-        request.form.get('TITRECONGRES')
-        request.form.get('NUMEDITIONCONGRES')
-        request.form.get('DTDEBUTCONGRES')
-        request.form.get('DTFINCONGRES')
-        request.form.get('URLSITECONGRES')
+        column_names = fetch_column_names(keys_validation)
+        columns = ', '.join(column_names)
+
+        x = datetime.datetime.now()
+        now_date = x.strftime("%Y-%m-%d")
+
+        values = []
+        values.append("'{}'".format(request.form.get('TITRECONGRES')))
+        values.append("'{}'".format(request.form.get('NUMEDITIONCONGRES')))
+        values.append("'{}'".format(request.form.get('DTDEBUTCONGRES')))
+        values.append("'{}'".format(request.form.get('DTFINCONGRES')))
+        values.append("'{}'".format(request.form.get('URLSITEWEBCONGRES')))
+
+        values_str = ', '.join(values)
+        query = f"INSERT INTO congres ({columns}) VALUES ({values_str})"
+
+        result = execute_query(get_connection(), query)
+        return result.__str__()
+
 
     return render_template('congres/new_success.html', errors=errors)
 
