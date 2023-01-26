@@ -1,0 +1,53 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+<h1>Création de congrès</h1>
+
+<form action="{{url_for("congres_new")}}" method="post">
+
+    <div>
+        <label for="TITRECONGRES">Titre du congrès :</label>
+        <input type="text" name="TITRECONGRES" id="TITRECONGRES">
+    </div>
+    <div>
+        <label for="NUMEDITIONCONGRES">Numéro d'édition du congrès :</label>
+        <input type="text" name="NUMEDITIONCONGRES" id="NUMEDITIONCONGRES">
+    </div>
+    <div>
+        <label for="DTDEBUTCONGRES">Date de début du congrès :</label>
+        <input type="text" name="DTDEBUTCONGRES" id="DTDEBUTCONGRES">
+    </div>
+    <div>
+        <label for="DTFINCONGRES">Date de fin du congrès :</label>
+        <input type="text" name="DTFINCONGRES" id="DTFINCONGRES">
+    </div>
+    <div>
+        <label for="URLSITECONGRES">URL du congrès :</label>
+        <input type="text" name="URLSITECONGRES" id="URLSITECONGRES">
+    </div>
+
+    <h2>Liste des thématiques</h2>
+    <ul>
+    {% for thematique in list_thematiques %}
+        <li>
+            <input type="checkbox" name="CODESTHEMATIQUES" id="CODETHEMATIQUE_{{thematique['CODETHEMATIQUE']}}" value="{{thematique['CODETHEMATIQUE']}}">{{thematique['NOMTHEMATIQUE']}}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <h2>Liste des activités</h2>
+    <ul> 
+
+        {% for activite in list_activites %}
+        <li>
+            <input type="checkbox" name="CODESACTIVITES" id="CODEACTIVITE_{{activite['CODEACTIVITE']}}" value="{{activite['CODEACTIVITE']}}">{{activite['NOMACTIVITE']}}
+
+        </li>
+        
+        {% endfor %}
+    </ul>
+
+    <button type="submit">Créer</button>
+</form>
+
+{% endblock %}

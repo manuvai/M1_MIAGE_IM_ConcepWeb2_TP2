@@ -32,6 +32,52 @@ def congres_list():
     return render_template('congres/list.html', column_names=column_names, list_elements=list_congres)
 
 
+@app.route("/congres/add")
+def congres_add():
+    list_thematiques = []
+    list_activites = []
+
+    query = """
+    SELECT a.*
+    FROM activites a
+    """
+
+    list_activites = execute_read_query(get_connection(), query)
+
+    query = """
+    SELECT t.*
+    FROM thematiques t
+    """
+
+    list_thematiques = execute_read_query(get_connection(), query)
+
+    return render_template('congres/add.html', list_thematiques=list_thematiques, list_activites=list_activites)
+
+@app.route("/congres/new", methods = ['POST'])
+def congres_new():
+
+    keys_validation = {
+        'TITRECONGRES': ['required'],
+        'NUMEDITIONCONGRES': ['required'],
+        'DTDEBUTCONGRES': ['required'],
+        'DTFINCONGRES': ['required'],
+        'URLSITECONGRES': ['required'],
+    }
+    errors = form_validate(request.form, keys_validation)
+
+    if (len(errors) == 0):   
+
+        activities_ids = request.form.getlist('CODESACTIVITES')
+        thematiques_ids = request.form.getlist('CODESTHEMATIQUES')
+
+        request.form.get('TITRECONGRES')
+        request.form.get('NUMEDITIONCONGRES')
+        request.form.get('DTDEBUTCONGRES')
+        request.form.get('DTFINCONGRES')
+        request.form.get('URLSITECONGRES')
+
+    return render_template('congres/new_success.html', errors=errors)
+
 @app.route("/participants")
 def participants_list():
     connection = get_connection()

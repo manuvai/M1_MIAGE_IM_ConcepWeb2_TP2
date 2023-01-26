@@ -1,0 +1,17 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+
+<div>
+    {% for error in errors %}
+        {{error}}<br>
+    {% endfor %}
+</div>
+
+{% if errors %}
+    Veuillez réessayer
+{% else %}
+    Gud
+{% endif %}
+
+{% endblock %}
