@@ -11,7 +11,32 @@
 {% if errors %}
     Veuillez réessayer
 {% else %}
-    Gud
+    TITRECONGRES: {{form_data['TITRECONGRES']}}<br>
+    NUMEDITIONCONGRES: {{form_data['NUMEDITIONCONGRES']}}<br>
+    DTDEBUTCONGRES: {{form_data['DTDEBUTCONGRES']}}<br>
+    DTFINCONGRES: {{form_data['DTFINCONGRES']}}<br>
+    URLSITEWEBCONGRES: {{form_data['URLSITEWEBCONGRES']}}<br>
+    
+    <h2>Liste des thématiques</h2>
+    <ul>
+    {% for thematique in form_data['THEMATIQUES'] %}
+        <li>
+            {{thematique['NOMTHEMATIQUE']}}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <h2>Liste des activités</h2>
+    <ul> 
+
+        {% for activite in form_data['ACTIVITES'] %}
+        <li>
+            {{activite['NOMACTIVITE']}}
+
+        </li>
+        
+        {% endfor %}
+    </ul>
 {% endif %}
 
 {% endblock %}

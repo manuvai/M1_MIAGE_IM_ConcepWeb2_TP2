@@ -65,6 +65,17 @@ def congres_new():
     }
     errors = form_validate(request.form, keys_validation)
 
+    form_data = {
+        'TITRECONGRES': request.form.get('TITRECONGRES'),
+        'NUMEDITIONCONGRES': request.form.get('NUMEDITIONCONGRES'),
+        'DTDEBUTCONGRES': request.form.get('DTDEBUTCONGRES'),
+        'DTFINCONGRES': request.form.get('DTFINCONGRES'),
+        'URLSITEWEBCONGRES': request.form.get('URLSITEWEBCONGRES'),
+    }
+
+    activities_ids = []
+    thematiques_ids = []
+
     if (len(errors) == 0):   
 
         activities_ids = request.form.getlist('CODESACTIVITES')
@@ -72,9 +83,6 @@ def congres_new():
 
         column_names = fetch_column_names(keys_validation)
         columns = ', '.join(column_names)
-
-        x = datetime.datetime.now()
-        now_date = x.strftime("%Y-%m-%d")
 
         values = []
         values.append("'{}'".format(request.form.get('TITRECONGRES')))
@@ -86,11 +94,15 @@ def congres_new():
         values_str = ', '.join(values)
         query = f"INSERT INTO congres ({columns}) VALUES ({values_str})"
 
-        result = execute_query(get_connection(), query)
-        return result.__str__()
+        inserted_id = execute_query(get_connection(), query)
 
+        add_traiter_line(thematiques_ids, inserted_id)
+        add_proposer_line(activities_ids, inserted_id)
 
-    return render_template('congres/new_success.html', errors=errors)
+    form_data['ACTIVITES'] = find_activites(activities_ids)
+    form_data['THEMATIQUES'] = find_thematiques(thematiques_ids)
+
+    return render_template('congres/new_success.html', errors=errors, form_data=form_data)
 
 @app.route("/participants")
 def participants_list():
@@ -224,6 +236,55 @@ def fetch_column_names(keys_validation: dict) -> list:
         response.append(key)
 
     return response
+
+def find_activites(ids: list) -> list:
+    query = '''
+    SELECT *
+    FROM activites
+    WHERE codeActivite IN ({ids_str})
+    '''
+
+    ids_str = ', '.join(ids)
+    result = execute_read_query(get_connection(), query.format(ids_str = ids_str))
+    if not result:
+        return []
+    return result
+
+def find_thematiques(ids) -> list:
+    query = '''
+    SELECT *
+    FROM thematiques
+    WHERE codeThematique IN ({ids_str})
+    '''
+
+    ids_str = ', '.join(ids)
+    result = execute_read_query(get_connection(), query.format(ids_str = ids_str))
+    if not result:
+        return []
+    return result
+
+def add_traiter_line(thematiques_ids: list, congres_id: int):
+    query = 'INSERT INTO traiter (codCongres, codeThematique) VALUES '
+
+    temp_sql = []
+    for them_id in thematiques_ids:
+        temp_sql.append('({}, {})'.format(congres_id, them_id))
+
+    query = query + ', '.join(temp_sql)
+
+    execute_query(get_connection(), query)
+
+def add_proposer_line(activites_ids: list, congres_id: int):
+    query = 'INSERT INTO proposer (codCongres, codeActivite) VALUES '
+
+    temp_sql = []
+    for act_id in activites_ids:
+        temp_sql.append('({}, {})'.format(congres_id, act_id))
+
+    query = query + ', '.join(temp_sql)
+
+    execute_query(get_connection(), query)
+
 
 def get_connection() -> sqlite3.Connection:
     """Implémentation de la récupération de la BD commune
