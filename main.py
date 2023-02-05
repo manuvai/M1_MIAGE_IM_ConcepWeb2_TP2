@@ -1,5 +1,7 @@
 import datetime
 import sqlite3
+from Database import Database
+from CongresTable import CongresTable
 from connection_db import create_connection, execute_query, execute_read_query
 from flask import Flask, request
 from flask import render_template
@@ -16,18 +18,16 @@ def index():
 
 @app.route("/congres")
 def congres_list():
-    connection = get_connection()
+    db = Database.get_instance()
+    congresTable = CongresTable(db)
 
-    query = """
-    SELECT *
-    FROM congres
-    """
-
-    list_congres = execute_read_query(connection, query)
+    list_congres = congresTable.all()
 
     column_names = []
-    if (len(list_congres) > 0):
+    if (not list_congres is None and len(list_congres) > 0):
         column_names = list_congres[0].keys()
+    else:
+        list_congres = []
 
     return render_template('congres/list.html', column_names=column_names, list_elements=list_congres)
 
