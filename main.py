@@ -2,6 +2,8 @@ import datetime
 import sqlite3
 from Database import Database
 from CongresTable import CongresTable
+from ParticipantsTable import ParticipantsTable
+from StatutsTable import StatutsTable
 from connection_db import create_connection, execute_query, execute_read_query
 from flask import Flask, request
 from flask import render_template
@@ -9,12 +11,10 @@ import re
 
 app = Flask(__name__)
 
-
 @app.route("/index")
 @app.route("/")
 def index():
     return render_template('index.html')
-
 
 @app.route("/congres")
 def congres_list():
@@ -30,7 +30,6 @@ def congres_list():
         list_congres = []
 
     return render_template('congres/list.html', column_names=column_names, list_elements=list_congres)
-
 
 @app.route("/congres/add")
 def congres_add():
@@ -106,14 +105,10 @@ def congres_new():
 
 @app.route("/participants")
 def participants_list():
-    connection = get_connection()
 
-    query = """
-    SELECT *
-    FROM participants
-    """
+    participantsTable = ParticipantsTable(Database.get_instance())
 
-    list_participants = execute_read_query(connection, query)
+    list_participants = participantsTable.all()
 
     column_names = []
     if (len(list_participants) > 0):
@@ -123,14 +118,9 @@ def participants_list():
 
 @app.route("/participants/add")
 def participants_add():
-    connection = get_connection()
+    statutsTable = StatutsTable(Database.get_instance())
 
-    query = """
-    SELECT *
-    FROM statuts
-    """
-
-    list_statuts = execute_read_query(connection, query)
+    list_statuts = statutsTable.all()
 
     return render_template('participants/add.html', list_statuts=list_statuts)
     
