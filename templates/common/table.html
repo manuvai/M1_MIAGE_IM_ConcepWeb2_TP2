@@ -1,8 +1,8 @@
-<table border="1">
+<table class="table">
     <thead>
         <tr>
             {% for column_name in column_names %}
-            <th>{{column_name}}</th>
+            <th scope="col">{{column_name}}</th>
             {% endfor %}
         </tr>
     </thead>
@@ -10,11 +10,11 @@
         {% for element in list_elements %}
         <tr>
             {% for column_name in column_names %}
-                
-                <th>{{element[column_name]}}</th>
+
+            <th>{{element[column_name]}}</th>
             {% endfor %}
         </tr>
-        
+
         {% endfor %}
     </tbody>
 </table>

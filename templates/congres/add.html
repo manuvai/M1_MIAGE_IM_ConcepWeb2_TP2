@@ -5,49 +5,50 @@
 
 <form action="{{url_for("congres_new")}}" method="post">
 
-    <div>
+    <div class="form-group">
         <label for="TITRECONGRES">Titre du congrès :</label>
-        <input type="text" name="TITRECONGRES" id="TITRECONGRES">
+        <input class="form-control" type="text" name="TITRECONGRES" id="TITRECONGRES">
     </div>
-    <div>
+    <div class="form-group">
         <label for="NUMEDITIONCONGRES">Numéro d'édition du congrès :</label>
-        <input type="text" name="NUMEDITIONCONGRES" id="NUMEDITIONCONGRES">
+        <input class="form-control" type="text" name="NUMEDITIONCONGRES" id="NUMEDITIONCONGRES">
     </div>
-    <div>
+    <div class="form-group">
         <label for="DTDEBUTCONGRES">Date de début du congrès :</label>
-        <input type="text" name="DTDEBUTCONGRES" id="DTDEBUTCONGRES">
+        <input class="form-control" type="text" name="DTDEBUTCONGRES" id="DTDEBUTCONGRES">
     </div>
-    <div>
+    <div class="form-group">
         <label for="DTFINCONGRES">Date de fin du congrès :</label>
-        <input type="text" name="DTFINCONGRES" id="DTFINCONGRES">
+        <input class="form-control" type="text" name="DTFINCONGRES" id="DTFINCONGRES">
     </div>
-    <div>
+    <div class="form-group">
         <label for="URLSITEWEBCONGRES">URL du congrès :</label>
-        <input type="text" name="URLSITEWEBCONGRES" id="URLSITEWEBCONGRES">
+        <input class="form-control" type="text" name="URLSITEWEBCONGRES" id="URLSITEWEBCONGRES">
     </div>
 
     <h2>Liste des thématiques</h2>
-    <ul>
     {% for thematique in list_thematiques %}
-        <li>
-            <input type="checkbox" name="CODESTHEMATIQUES" id="CODETHEMATIQUE_{{thematique['CODETHEMATIQUE']}}" value="{{thematique['CODETHEMATIQUE']}}">{{thematique['NOMTHEMATIQUE']}}
-        </li>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="CODESTHEMATIQUES" id="CODETHEMATIQUE_{{thematique['CODETHEMATIQUE']}}" value="{{thematique['CODETHEMATIQUE']}}">
+        <label class="form-check-label" for="CODETHEMATIQUE_{{thematique['CODETHEMATIQUE']}}">
+            {{thematique['NOMTHEMATIQUE']}}
+        </label>
+        
+    </div>
     {% endfor %}
-    </ul>
 
     <h2>Liste des activités</h2>
-    <ul> 
-
-        {% for activite in list_activites %}
-        <li>
-            <input type="checkbox" name="CODESACTIVITES" id="CODEACTIVITE_{{activite['CODEACTIVITE']}}" value="{{activite['CODEACTIVITE']}}">{{activite['NOMACTIVITE']}}
-
-        </li>
+    {% for activite in list_activites %}
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="CODESACTIVITES" id="CODEACTIVITE_{{activite['CODEACTIVITE']}}" value="{{activite['CODEACTIVITE']}}">
+        <label class="form-check-label" for="CODEACTIVITE_{{activite['CODEACTIVITE']}}">
+            {{activite['NOMACTIVITE']}}
+        </label>
         
-        {% endfor %}
-    </ul>
+    </div>
+    {% endfor %}
 
-    <button type="submit">Créer</button>
+    <button class="btn btn-primary" type="submit">Créer</button>
 </form>
 
 {% endblock %}

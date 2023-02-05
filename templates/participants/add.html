@@ -6,42 +6,47 @@
 <form action="{{url_for("participants_new")}}" method="post">
     <div>
         {% for statut in list_statuts %}
-            <input type="radio" name="CODESTATUT" id="CODESTATUT_{{statut['CODESTATUT']}}" value="{{statut['CODESTATUT']}}">{{statut['NOMSTATUT']}}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="CODESTATUT" id="CODESTATUT_{{statut['CODESTATUT']}}" value="{{statut['CODESTATUT']}}">
+                <label class="form-check-label" for="CODESTATUT_{{statut['CODESTATUT']}}">
+                    {{statut['NOMSTATUT']}}
+                </label>
+            </div>
         {% endfor %}
     </div>
-    <div>
+    <div class="form-group">
         <label for="NOMPART">Nom :</label>
-        <input type="text" name="NOMPART" id="NOMPART">
+        <input class="form-control" type="text" name="NOMPART" id="NOMPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="PRENOMPART">Prénom :</label>
-        <input type="text" name="PRENOMPART" id="PRENOMPART">
+        <input class="form-control" type="text" name="PRENOMPART" id="PRENOMPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="ORGANISMEPART">Organisme :</label>
-        <input type="text" name="ORGANISMEPART" id="ORGANISMEPART">
+        <input class="form-control" type="text" name="ORGANISMEPART" id="ORGANISMEPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="CPPART">Code Postal :</label>
-        <input type="number" name="CPPART" id="CPPART">
+        <input class="form-control" type="number" name="CPPART" id="CPPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="ADRPART">Adresse :</label>
-        <input type="text" name="ADRPART" id="ADRPART">
+        <input class="form-control" type="text" name="ADRPART" id="ADRPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="VILLEPART">Ville :</label>
-        <input type="text" name="VILLEPART" id="VILLEPART">
+        <input class="form-control" type="text" name="VILLEPART" id="VILLEPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="PAYSPART">Pays :</label>
-        <input type="text" name="PAYSPART" id="PAYSPART">
+        <input class="form-control" type="text" name="PAYSPART" id="PAYSPART">
     </div>
-    <div>
+    <div class="form-group">
         <label for="EMAILPART">E-mail :</label>
-        <input type="email" name="EMAILPART" id="EMAILPART">
+        <input class="form-control" type="email" name="EMAILPART" id="EMAILPART">
     </div>
-    <button type="submit">Créer</button>
+    <button class="btn btn-primary mt-4" type="submit">Créer</button>
 </form>
 
 {% endblock %}
