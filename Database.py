@@ -10,10 +10,9 @@ class Database:
 
     @classmethod
     def get_instance(cls):
-        if (cls._instance is None):
-            cls._instance = cls(
-                Config.get('db.path')
-            )
+        cls._instance = cls(
+            Config.get('db.path')
+        )
 
         return cls._instance
 
@@ -78,6 +77,7 @@ class Database:
 
         except sqlite3.Error as e:
             print(f"The error {e} occured")
+
 
         return data
 
