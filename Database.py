@@ -42,7 +42,7 @@ class Database:
 
         return connection
 
-    def execute_read_query(self, query: str) -> list:
+    def execute_read_query(self, query: str, values: any = None) -> list:
         """Implémentation de la récupération de données à partir d'une requête
 
         Args:
@@ -56,7 +56,10 @@ class Database:
 
         try:
             cursor = self.connection.cursor()
-            exec_data = cursor.execute(query)
+            if (values is None):
+                exec_data = cursor.execute(query)
+            else:
+                exec_data = cursor.execute(query, values)
 
             data = []
 

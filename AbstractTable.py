@@ -21,3 +21,13 @@ class AbstractTable:
         query = query.format(table_name=self.table_name)
 
         return self.db.execute_read_query(query)
+
+    def find_by_key(self, key: str, value: str, operator: str = '='):
+        query = """
+        SELECT *
+        FROM {table_name}
+        WHERE {key} {operator} ?
+        """
+        query = query.format(table_name=self.table_name, key=key, operator=operator)
+ 
+        return self.db.execute_read_query(query, (value,))

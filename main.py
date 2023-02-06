@@ -144,7 +144,7 @@ def participants_new():
     is_valid = len(errors) == 0
     connection = get_connection()
 
-    is_already_registered = find_participant_by_email(connection, request.form.get('EMAILPART'))
+    is_already_registered = find_participant_by_email(request.form.get('EMAILPART'))
     if (len(is_already_registered) > 0):
         is_valid = False
         errors.append("L'utilisateur ayant pour email {} est déjà inscrit. Veuillez réessayer".format(request.form.get('EMAILPART')))
@@ -287,15 +287,10 @@ def get_connection() -> sqlite3.Connection:
 
     return connection
 
-def find_participant_by_email(connection: sqlite3.Connection, email: str) -> dict|None:
-    query = """
-    SELECT *
-    FROM participants
-    WHERE EMAILPART = '{email}'
-    """
-    query = query.format(email=email)
-
-    return execute_read_query(connection, query)
+def find_participant_by_email(email: str) -> dict|None:
+    participantsTable = ParticipantsTable(Database.get_instance())
+    
+    return participantsTable.find_by_email(email)
     
 
 def form_validate(form: any, keys_validation: dict) -> list:
