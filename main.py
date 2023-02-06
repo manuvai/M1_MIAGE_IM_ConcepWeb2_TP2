@@ -8,7 +8,6 @@ from ParticipantsTable import ParticipantsTable
 from StatutsTable import StatutsTable
 from TraiterTable import TraiterTable
 from ProposerTable import ProposerTable
-from connection_db import create_connection, execute_query, execute_read_query
 from flask import Flask, request
 from flask import render_template
 import re
@@ -133,7 +132,6 @@ def participants_new():
     errors = form_validate(request.form, keys_validation)
 
     is_valid = len(errors) == 0
-    connection = get_connection()
 
     is_already_registered = find_participant_by_email(request.form.get('EMAILPART'))
     if (len(is_already_registered) > 0):
@@ -229,18 +227,6 @@ def add_proposer_line(activites_ids: list, congres_id: int):
 
     proposerTable = ProposerTable(Database.get_instance())
     proposerTable.insert_lines(values)
-
-
-def get_connection() -> sqlite3.Connection:
-    """Implémentation de la récupération de la BD commune
-
-    Returns:
-        sqlite3.Connection: La connection à la BD
-    """
-    db_path = './db/bd_congres.db'
-    connection = create_connection(db_path)
-
-    return connection
 
 def find_participant_by_email(email: str) -> dict|None:
     participantsTable = ParticipantsTable(Database.get_instance())
