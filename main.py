@@ -181,30 +181,13 @@ def inscriptions_search():
 def inscriptions_list():
     email = request.form.get('email')
 
-    query = """
-    SELECT c.*
-    FROM congres c, inscrire i, participants p
-    WHERE c.codCongres = i.codCongres
-        AND i.codParticipant = p.codParticipant
-        AND p.EMAILPART = '{}'
-    """
+    congresTable = CongresTable(Database.get_instance())
 
-    connection = get_connection()
-    list_congres = execute_read_query(connection, query.format(email))
+    list_congres = congresTable.find_by_participant_email(email)
     
     for congres in list_congres:
-        
-        query = """
-        SELECT t.*
-        FROM congres c, choix_thematiques ct, participants p, thematiques t
-        WHERE c.codCongres = ct.codCongres
-            AND ct.codParticipant = p.codParticipant
-            AND t.codeThematique = ct.codeThematique
-            AND p.EMAILPART = '{}'
-            AND c.codCongres = {}
-        """
-        query = query.format(email, congres['CODCONGRES'])
-        temp_list_thematiques = execute_read_query(connection, query)
+        thematiquesTable = ThematiquesTable(Database.get_instance())
+        temp_list_thematiques = thematiquesTable.find_by_congres_participants(int(congres['CODCONGRES']), email)
 
         list_thematiques = []
         for thematique in temp_list_thematiques:
@@ -222,27 +205,18 @@ def fetch_column_names(keys_validation: dict) -> list:
     return response
 
 def find_activites(ids: list) -> list:
-    query = '''
-    SELECT *
-    FROM activites
-    WHERE codeActivite IN ({ids_str})
-    '''
 
-    ids_str = ', '.join(ids)
-    result = execute_read_query(get_connection(), query.format(ids_str = ids_str))
+    activitesTable = ActivitesTable(Database.get_instance())
+
+    result = activitesTable.find_by_ids(ids)
     if not result:
         return []
     return result
 
 def find_thematiques(ids) -> list:
-    query = '''
-    SELECT *
-    FROM thematiques
-    WHERE codeThematique IN ({ids_str})
-    '''
+    thematiquesTable = ThematiquesTable(Database.get_instance())
 
-    ids_str = ', '.join(ids)
-    result = execute_read_query(get_connection(), query.format(ids_str = ids_str))
+    result = thematiquesTable.find_by_ids(ids)
     if not result:
         return []
     return result
