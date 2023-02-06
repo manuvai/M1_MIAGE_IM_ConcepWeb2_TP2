@@ -2,6 +2,8 @@ import datetime
 import sqlite3
 from Database import Database
 from CongresTable import CongresTable
+from ActivitesTable import ActivitesTable
+from ThematiquesTable import ThematiquesTable
 from ParticipantsTable import ParticipantsTable
 from StatutsTable import StatutsTable
 from connection_db import create_connection, execute_query, execute_read_query
@@ -36,19 +38,11 @@ def congres_add():
     list_thematiques = []
     list_activites = []
 
-    query = """
-    SELECT a.*
-    FROM activites a
-    """
+    activitesTable = ActivitesTable(Database.get_instance())
+    list_activites = activitesTable.all()
 
-    list_activites = execute_read_query(get_connection(), query)
-
-    query = """
-    SELECT t.*
-    FROM thematiques t
-    """
-
-    list_thematiques = execute_read_query(get_connection(), query)
+    thematiquesTable = ThematiquesTable(Database.get_instance())
+    list_thematiques = thematiquesTable.all()
 
     return render_template('congres/add.html', list_thematiques=list_thematiques, list_activites=list_activites)
 
