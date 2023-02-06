@@ -22,3 +22,14 @@ class CongresTable(AbstractTable):
         list_congres = self.db.execute_read_query(query, (email,))
 
         return list_congres
+        
+    def insert_line(self, values: list):
+        columns = [
+            'TITRECONGRES',
+            'NUMEDITIONCONGRES',
+            'DTDEBUTCONGRES',
+            'DTFINCONGRES',
+            'URLSITEWEBCONGRES',
+        ]
+
+        return super().insert_line(values, columns)

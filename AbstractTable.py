@@ -46,3 +46,25 @@ class AbstractTable:
         query = query.format(table_name=self.table_name, key=key, parametered_list=parametered_list)
  
         return self.db.execute_read_query(query, values)
+    
+    def insert_line(self, values: list, columns: list):
+        query = "INSERT INTO participants ({columns}) VALUES ({values_str})"
+        
+        values_str = ['?' for i in range(len(columns))]
+        query = query.format(
+            columns = ','.join(columns),
+            values_str = ','.join(values_str)
+        )
+
+        return self.db.execute_query(query, tuple(values))
+    
+    def insert_lines(self, values: list, columns: list):
+        query = "INSERT INTO participants ({columns}) VALUES ({values_str})"
+        
+        values_str = ['?' for i in range(len(columns))]
+        query = query.format(
+            columns = ','.join(columns),
+            values_str = ','.join(values_str)
+        )
+
+        return self.db.execute_query(query, tuple(values))

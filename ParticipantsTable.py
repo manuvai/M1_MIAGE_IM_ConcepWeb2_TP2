@@ -14,3 +14,19 @@ class ParticipantsTable(AbstractTable):
 
         return response
 
+    def insert_line(self, values: list):
+        columns = [
+            'CODESTATUT',
+            'NOMPART',
+            'PRENOMPART',
+            'ORGANISMEPART',
+            'CPPART',
+            'ADRPART',
+            'VILLEPART',
+            'PAYSPART',
+            'EMAILPART',
+            'DTINSCRIPTION',
+        ]
+
+        return super().insert_line(values, columns)
+

@@ -52,7 +52,7 @@ class Database:
         Returns:
             list: La liste de retour
         """
-        data = None
+        data = []
 
         try:
             cursor = self.connection.cursor()
@@ -84,7 +84,7 @@ class Database:
 
         return data
 
-    def execute_query(self, query: str) -> any:
+    def execute_query(self, query: str, values: any = None) -> any:
         """Implémentation de la récupération de données à partir d'une requête
 
         Args:
@@ -97,7 +97,31 @@ class Database:
 
         try:
             cursor = self.connection.cursor()
-            exec_data = cursor.execute(query)
+            if (values is None):
+                exec_data = cursor.execute(query)
+            else:
+                exec_data = cursor.execute(query, values)
+            self.connection.commit()
+            return cursor.lastrowid
+
+
+        except sqlite3.Error as e:
+            print(f"The error {e} occured")
+
+    def executemany_query(self, query: str, values: tuple) -> any:
+        """Implémentation de la récupération de données à partir d'une requête
+
+        Args:
+            connection (sqlite3.Connection): La connection à la DB
+            query (str): La requête
+
+        Returns:
+            list: La liste de retour
+        """
+
+        try:
+            cursor = self.connection.cursor()
+            exec_data = cursor.executemany(query, values)
             self.connection.commit()
             return cursor.lastrowid
 

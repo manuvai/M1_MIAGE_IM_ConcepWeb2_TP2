@@ -6,6 +6,8 @@ from ActivitesTable import ActivitesTable
 from ThematiquesTable import ThematiquesTable
 from ParticipantsTable import ParticipantsTable
 from StatutsTable import StatutsTable
+from TraiterTable import TraiterTable
+from ProposerTable import ProposerTable
 from connection_db import create_connection, execute_query, execute_read_query
 from flask import Flask, request
 from flask import render_template
@@ -74,20 +76,15 @@ def congres_new():
         activities_ids = request.form.getlist('CODESACTIVITES')
         thematiques_ids = request.form.getlist('CODESTHEMATIQUES')
 
-        column_names = fetch_column_names(keys_validation)
-        columns = ', '.join(column_names)
-
         values = []
-        values.append("'{}'".format(request.form.get('TITRECONGRES')))
-        values.append("'{}'".format(request.form.get('NUMEDITIONCONGRES')))
-        values.append("'{}'".format(request.form.get('DTDEBUTCONGRES')))
-        values.append("'{}'".format(request.form.get('DTFINCONGRES')))
-        values.append("'{}'".format(request.form.get('URLSITEWEBCONGRES')))
+        values.append(request.form.get('TITRECONGRES'))
+        values.append(request.form.get('NUMEDITIONCONGRES'))
+        values.append(request.form.get('DTDEBUTCONGRES'))
+        values.append(request.form.get('DTFINCONGRES'))
+        values.append(request.form.get('URLSITEWEBCONGRES'))
 
-        values_str = ', '.join(values)
-        query = f"INSERT INTO congres ({columns}) VALUES ({values_str})"
-
-        inserted_id = execute_query(get_connection(), query)
+        congresTable = CongresTable(Database.get_instance())
+        inserted_id = congresTable.insert_line(values)
 
         add_traiter_line(thematiques_ids, inserted_id)
         add_proposer_line(activities_ids, inserted_id)
@@ -145,31 +142,24 @@ def participants_new():
 
     if (is_valid):
         
-        
-        column_names = fetch_column_names(keys_validation)
-        column_names.append('DTINSCRIPTION')
-        columns = ', '.join(column_names)
-
         x = datetime.datetime.now()
         now_date = x.strftime("%Y-%m-%d")
 
         values = []
         values.append(request.form.get('CODESTATUT'))
-        values.append("'{}'".format(request.form.get('NOMPART')))
-        values.append("'{}'".format(request.form.get('PRENOMPART')))
-        values.append("'{}'".format(request.form.get('ORGANISMEPART')))
-        values.append("'{}'".format(request.form.get('CPPART')))
-        values.append("'{}'".format(request.form.get('ADRPART')))
-        values.append("'{}'".format(request.form.get('VILLEPART')))
-        values.append("'{}'".format(request.form.get('PAYSPART')))
-        values.append("'{}'".format(request.form.get('EMAILPART')))
-        values.append("'{}'".format(now_date))
+        values.append(request.form.get('NOMPART'))
+        values.append(request.form.get('PRENOMPART'))
+        values.append(request.form.get('ORGANISMEPART'))
+        values.append(request.form.get('CPPART'))
+        values.append(request.form.get('ADRPART'))
+        values.append(request.form.get('VILLEPART'))
+        values.append(request.form.get('PAYSPART'))
+        values.append(request.form.get('EMAILPART'))
+        values.append(now_date)
 
-        values_str = ', '.join(values)
+        participantsTable = ParticipantsTable(Database.get_instance())
 
-        query = f"INSERT INTO participants ({columns}) VALUES ({values_str})"
-
-        execute_query(connection, query)
+        participantsTable.insert_line(values)
 
     return render_template('participants/new.html', errors=errors, is_valid=is_valid)
 
@@ -222,26 +212,23 @@ def find_thematiques(ids) -> list:
     return result
 
 def add_traiter_line(thematiques_ids: list, congres_id: int):
-    query = 'INSERT INTO traiter (codCongres, codeThematique) VALUES '
+    
+    values = []
+    for thematique_id in thematiques_ids:
+        values.append([congres_id, thematique_id])
 
-    temp_sql = []
-    for them_id in thematiques_ids:
-        temp_sql.append('({}, {})'.format(congres_id, them_id))
+    traiterTable = TraiterTable(Database.get_instance())
+    traiterTable.insert_lines(values)
 
-    query = query + ', '.join(temp_sql)
-
-    execute_query(get_connection(), query)
 
 def add_proposer_line(activites_ids: list, congres_id: int):
-    query = 'INSERT INTO proposer (codCongres, codeActivite) VALUES '
+   
+    values = []
+    for activite_id in activites_ids:
+        values.append([congres_id, activite_id])
 
-    temp_sql = []
-    for act_id in activites_ids:
-        temp_sql.append('({}, {})'.format(congres_id, act_id))
-
-    query = query + ', '.join(temp_sql)
-
-    execute_query(get_connection(), query)
+    proposerTable = ProposerTable(Database.get_instance())
+    proposerTable.insert_lines(values)
 
 
 def get_connection() -> sqlite3.Connection:
