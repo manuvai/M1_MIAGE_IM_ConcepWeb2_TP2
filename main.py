@@ -8,6 +8,8 @@ from ParticipantsTable import ParticipantsTable
 from StatutsTable import StatutsTable
 from TraiterTable import TraiterTable
 from ProposerTable import ProposerTable
+from CongresAddValidator import CongresAddValidator
+from ParticipantAddValidator import ParticipantAddValidator
 from flask import Flask, request
 from flask import render_template
 import re
@@ -50,14 +52,8 @@ def congres_add():
 @app.route("/congres/new", methods = ['POST'])
 def congres_new():
 
-    keys_validation = {
-        'TITRECONGRES': ['required'],
-        'NUMEDITIONCONGRES': ['required'],
-        'DTDEBUTCONGRES': ['required'],
-        'DTFINCONGRES': ['required'],
-        'URLSITEWEBCONGRES': ['required'],
-    }
-    errors = form_validate(request.form, keys_validation)
+    v = CongresAddValidator(request.form)
+    errors = v.validate()
 
     form_data = {
         'TITRECONGRES': request.form.get('TITRECONGRES'),
@@ -116,20 +112,9 @@ def participants_add():
     
 @app.route("/participants/new", methods=["POST"])
 def participants_new():
+    v = ParticipantAddValidator(request.form)
 
-    keys_validation = {
-        'CODESTATUT': ['required'], 
-        'NOMPART': ['required'], 
-        'PRENOMPART': ['required'], 
-        'ORGANISMEPART': ['required'], 
-        'CPPART': ['required'], 
-        'ADRPART': ['required'], 
-        'VILLEPART': ['required'], 
-        'PAYSPART': ['required'], 
-        'EMAILPART': ['required', 'email'], 
-    }
-
-    errors = form_validate(request.form, keys_validation)
+    errors = v.validate()
 
     is_valid = len(errors) == 0
 
@@ -232,22 +217,6 @@ def find_participant_by_email(email: str) -> dict|None:
     participantsTable = ParticipantsTable(Database.get_instance())
     
     return participantsTable.find_by_email(email)
-    
-
-def form_validate(form: any, keys_validation: dict) -> list:
-    error_messages = []
-    for key, values in keys_validation.items():
-        if ('required' in values):
-            if (form.get(key) is None):
-                error_messages.append(f"Le champs {key} n'est pas présent dans le formulaire, veuillez renseigner une donnée")
-            elif (form.get(key) == ''):
-                error_messages.append(f"Le champs {key} est vide, veuillez renseigner une valeur")
-        if ('email' in values):
-            pat = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-            est_email = re.match(pat, form.get(key))
-            if (not est_email):
-                error_messages.append(f"Le champs {key} doit être un email valide (ex : nom.prenom@example.com). Veuillez réessayer")
-    return error_messages
 
 if (__name__ == '__main__'):
 
