@@ -11,7 +11,7 @@ from ProposerTable import ProposerTable
 from CongresAddValidator import CongresAddValidator
 from ParticipantAddValidator import ParticipantAddValidator
 from ConnectionValidator import ConnectionValidator
-from flask import Flask, request, session
+from flask import Flask, request, session, redirect, url_for
 from flask import render_template
 import re
 
@@ -30,13 +30,17 @@ def index():
         errors = v.validate()
         if (len(errors) <= 0):
             user = table.find_by_email(request.form.get('email'))[0]
-            print(user)
             session['user_id'] = user['CODPARTICIPANT']
 
     elif (not session.get('user_id') is None):
         user = table.find_by_code(session.get('user_id'))[0]
     
     return render_template('home/index.html', errors=errors, user=user)
+
+@app.route("/logout", methods=['POST'])
+def logout():
+    session.pop('user_id')
+    return redirect(url_for('index'))
 
 @app.route("/congres")
 def congres_list():

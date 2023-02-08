@@ -7,6 +7,7 @@ from Database import Database
 from ParticipantsTable import ParticipantsTable
 
 class ConnectionValidator(AbstractValidator):
+    _stop_on_first_error = True
 
     def __init__(self, data: any, table: ParticipantsTable):
         validators = {
