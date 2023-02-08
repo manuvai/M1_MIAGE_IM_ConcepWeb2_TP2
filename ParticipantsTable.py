@@ -9,8 +9,13 @@ class ParticipantsTable(AbstractTable):
 
     _table_name = 'participants'
 
+    def find_by_code(self, code: str):
+        response = self.find_by_key('CODPARTICIPANT', (code,))
+
+        return response
+
     def find_by_email(self, value: str):
-        response = self.find_by_key('EMAILPART', value)
+        response = self.find_by_key('EMAILPART', (value,))
 
         return response
 

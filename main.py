@@ -10,16 +10,33 @@ from TraiterTable import TraiterTable
 from ProposerTable import ProposerTable
 from CongresAddValidator import CongresAddValidator
 from ParticipantAddValidator import ParticipantAddValidator
-from flask import Flask, request
+from ConnectionValidator import ConnectionValidator
+from flask import Flask, request, session
 from flask import render_template
 import re
 
 app = Flask(__name__)
 
-@app.route("/index")
-@app.route("/")
+@app.route("/index", methods=['GET', 'POST'])
+@app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+
+    user = None
+    errors = []
+
+    table = ParticipantsTable(Database.get_instance())
+    if (request.method == 'POST'):
+        v = ConnectionValidator(request.form, table)
+        errors = v.validate()
+        if (len(errors) <= 0):
+            user = table.find_by_email(request.form.get('email'))[0]
+            print(user)
+            session['user_id'] = user['CODPARTICIPANT']
+
+    elif (not session.get('user_id') is None):
+        user = table.find_by_code(session.get('user_id'))[0]
+    
+    return render_template('home/index.html', errors=errors, user=user)
 
 @app.route("/congres")
 def congres_list():
@@ -223,5 +240,7 @@ if (__name__ == '__main__'):
     host = '127.0.0.1'
     port = 5000
     debug = True
+
+    app.secret_key = __name__
 
     app.run(host, port, debug)
