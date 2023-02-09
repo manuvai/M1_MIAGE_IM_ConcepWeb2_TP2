@@ -32,7 +32,7 @@ def index():
             user = table.find_by_email(request.form.get('email'))[0]
             session['user_id'] = user['CODPARTICIPANT']
 
-    elif (not session.get('user_id') is None):
+    elif (auth()):
         user = table.find_by_code(session.get('user_id'))[0]
     
     return render_template('home/index.html', errors=errors, user=user)
@@ -224,6 +224,18 @@ def add_traiter_line(thematiques_ids: list, congres_id: int):
     traiterTable = TraiterTable(Database.get_instance())
     traiterTable.insert_lines(values)
 
+def auth() -> bool:
+    user_id = session.get('user_id')
+    is_auth = not user_id is None
+
+    if (is_auth):
+        
+        table = ParticipantsTable(Database.get_instance())
+        participant = table.find_by_code(user_id)
+
+        is_auth = is_auth and len(participant) > 0
+
+    return is_auth
 
 def add_proposer_line(activites_ids: list, congres_id: int):
    
