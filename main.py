@@ -191,13 +191,6 @@ def inscriptions_list():
 
     return render_template('inscriptions/list.html', email=email, list_congres=list_congres)
 
-def fetch_column_names(keys_validation: dict) -> list:
-    response = []
-    for key in keys_validation.keys():
-        response.append(key)
-
-    return response
-
 def find_activites(ids: list) -> list:
 
     activitesTable = ActivitesTable(Database.get_instance())
