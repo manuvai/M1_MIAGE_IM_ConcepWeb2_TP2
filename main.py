@@ -32,6 +32,7 @@ def index():
         if (len(errors) <= 0):
             user = table.find_by_email(request.form.get('email'))[0]
             session['user_id'] = user['CODPARTICIPANT']
+            return redirect(url_for('index'))
 
     elif (auth()):
         user = table.find_by_code(session.get('user_id'))[0]
