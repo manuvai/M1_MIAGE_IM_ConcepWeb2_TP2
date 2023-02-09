@@ -24,6 +24,7 @@ def index():
 
     user = None
     errors = []
+    list_congres = []
 
     table = ParticipantsTable(Database.get_instance())
     if (request.method == 'POST'):
@@ -36,8 +37,13 @@ def index():
 
     elif (auth()):
         user = table.find_by_code(session.get('user_id'))[0]
+        table = CongresTable(Database.get_instance())
+
+        list_congres = table.all()
     
-    return render_template('home/index.html', errors=errors, user=user)
+    return render_template('home/index.html', \
+        errors=errors, user=user, \
+        list_congres=list_congres)
 
 @app.route("/logout", methods=['POST'])
 def logout():
@@ -192,6 +198,24 @@ def inscriptions_list():
 
 
     return render_template('inscriptions/list.html', email=email, list_congres=list_congres)
+
+@app.route("/inscriptions/add/<congres_id>")
+def inscriptions_add(congres_id):
+    db = Database.get_instance()
+
+    thematiquesTable = ThematiquesTable(db)
+    activitesTable = ActivitesTable(db)
+    congresTable = CongresTable(db)
+
+    list_thematiques = thematiquesTable.find_for_congres(congres_id)
+    list_activites = activitesTable.find_for_congres(congres_id)
+    congres = congresTable.find_by_code(congres_id)[0]
+    
+    return render_template('inscriptions/add.html', congres=congres, list_thematiques=list_thematiques, list_activites=list_activites)
+
+@app.route("/inscriptions/new", methods=['POST'])
+def inscriptions_new():
+    pass
 
 if (__name__ == '__main__'):
 

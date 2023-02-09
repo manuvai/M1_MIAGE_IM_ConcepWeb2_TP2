@@ -1,0 +1,32 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+
+<h1>Inscription au congres {{congres['TITRECONGRES']}} (#{{congres['CODCONGRES']}})</h1>
+
+<form action="{{url_for("inscriptions_new")}}" method="post">
+    <input type="hidden" name="CODCONGRES" value="{{congres['CODCONGRES']}}">
+    <h2>Liste des thématiques</h2>
+    {% for thematique in list_thematiques %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="THEMATIQUES" id="THEMATIQUE_{{thematique['CODETHEMATIQUE']}}">
+            <label class="form-check-label" for="THEMATIQUE_{{thematique['CODETHEMATIQUE']}}">
+            {{thematique['NOMTHEMATIQUE']}}
+            </label>
+        </div>
+    {% endfor %}
+        
+    <h2>Liste des activités</h2>
+    {% for activite in list_activites %}
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="ACTIVITES" id="ACTIVITE_{{activite['CODEACTIVITE']}}">
+            <label class="form-check-label" for="ACTIVITE_{{activite['CODEACTIVITE']}}">
+            {{activite['NOMACTIVITE']}}
+            </label>
+        </div>
+    {% endfor %}
+    
+    <button type="submit" class="mt-2 btn btn-primary">Valider</button>
+</form>
+
+{% endblock %}

@@ -11,6 +11,17 @@ class ThematiquesTable(AbstractTable):
         
         return super().find_by_ids(ids, 'codeThematique')
 
+    def find_for_congres(self, congres_id: int):
+        query = """
+        SELECT t.*
+        FROM congres c, thematiques t, traiter tr
+        WHERE c.codCongres = tr.codCongres
+            AND tr.codeThematique = t.codeThematique
+            AND c.codCongres = ?
+        """
+
+        return self.db.execute_read_query(query, (congres_id,))
+
     def find_by_congres_participants(self, congres_id: int, participant_email: str):
         
         query = """

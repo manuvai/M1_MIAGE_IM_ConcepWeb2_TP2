@@ -9,6 +9,9 @@ class CongresTable(AbstractTable):
 
     _table_name = 'congres'
 
+    def find_by_code(self, code: int):
+        return super().find_by_key('CODCONGRES', (code,))
+
     def find_by_participant_email(self, email: str):
         
         query = """
