@@ -8,6 +8,9 @@ from ParticipantsTable import ParticipantsTable
 from StatutsTable import StatutsTable
 from TraiterTable import TraiterTable
 from ProposerTable import ProposerTable
+from InscrireTable import InscrireTable
+from ChoixActivitesTable import ChoixActivitesTable
+from ChoixThematiquesTable import ChoixThematiquesTable
 from CongresAddValidator import CongresAddValidator
 from ParticipantAddValidator import ParticipantAddValidator
 from ConnectionValidator import ConnectionValidator
@@ -213,9 +216,47 @@ def inscriptions_add(congres_id):
     
     return render_template('inscriptions/add.html', congres=congres, list_thematiques=list_thematiques, list_activites=list_activites)
 
+@app.route("/inscriptions/confirm", methods=['POST'])
+def inscriptions_confirm():
+    db = Database.get_instance()
+
+    congresTable = CongresTable(db)
+    
+    thematiques_ids = request.form.getlist('CODESTHEMATIQUES')
+    activities_ids = request.form.getlist('CODESACTIVITES')
+
+    congres_id = request.form.get('CODCONGRES')
+    user_id = session.get('user_id')
+
+    list_activites = find_activites(activities_ids)
+    list_thematiques = find_thematiques(thematiques_ids)
+    congres = congresTable.find_by_code(congres_id)[0]
+    tarif = congresTable.find_participant_tarif(congres_id, user_id)[0].get('MONTANTTARIF')
+
+    total = float(tarif)
+
+    for activite in list_activites:
+        total += float(activite['PRIXACTIVITE'])
+
+    return render_template('inscriptions/confirm.html', total=total, congres=congres, tarif=tarif, list_thematiques=list_thematiques, list_activites=list_activites)
+
 @app.route("/inscriptions/new", methods=['POST'])
 def inscriptions_new():
-    pass
+    thematiques_ids = request.form.getlist('CODESTHEMATIQUES[]')
+    activities_ids = request.form.getlist('CODESACTIVITES[]')
+    congres_id = request.form.get('CODCONGRES')
+
+    user_id = session.get('user_id')
+
+    inscrireTable = InscrireTable(Database.get_instance())
+    choixActivitesTable = ChoixActivitesTable(Database.get_instance())
+    choixThematiquesTable = ChoixThematiquesTable(Database.get_instance())
+
+    inscrireTable.insert_line(user_id, congres_id)
+    choixActivitesTable.insert_lines(user_id, congres_id, activities_ids)
+    choixThematiquesTable.insert_lines(user_id, congres_id, thematiques_ids)
+
+    return redirect(url_for('index', add_success = 1))
 
 if (__name__ == '__main__'):
 

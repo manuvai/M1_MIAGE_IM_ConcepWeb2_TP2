@@ -1,0 +1,72 @@
+{% extends "layouts/default.html" %}
+
+{% block pageContent %}
+
+<h1>Confirmation d'inscription au congres {{congres['TITRECONGRES']}} (#{{congres['CODCONGRES']}})</h1>
+
+<form action="{{url_for("inscriptions_new")}}" method="post">
+    <input type="hidden" name="CODCONGRES" value="{{congres['CODCONGRES']}}">
+    
+    <div class="container mb-4">
+        <h2>Liste des thématiques</h2>
+
+        <ol class="list-group list-group-numbered">
+            {% for thematique in list_thematiques %}
+            <input type="hidden" name="CODESTHEMATIQUES[]" value="{{thematique['CODETHEMATIQUE']}}" id="THEMATIQUE_{{thematique['CODETHEMATIQUE']}}">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="fw-bold">{{thematique['NOMTHEMATIQUE']}}</div>
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+    
+    <div class="container mb-4">
+        <h2>Liste des activités</h2>
+        <ol class="list-group list-group-numbered">
+        {% for activite in list_activites %}
+            <input type="hidden" name="CODESACTIVITES[]" value="{{activite['CODEACTIVITE']}}" id="ACTIVITE_{{activite['CODEACTIVITE']}}">
+            <li class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                <div class="fw-bold">{{activite['NOMACTIVITE']}}</div>
+                </div>
+                <!-- <span class="badge bg-primary rounded-pill">{{activite['PRIXACTIVITE']}}€</span> -->
+            </li>
+        {% endfor %}
+        </ol>
+            
+    </div>
+
+    <div class="container mb-4">
+        <h2>Récapitulatif</h2>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>Montant de participation au congres</td>
+                    <td>{{tarif}}€</td>
+                </tr>
+                {% for activite in list_activites %}
+                <tr>
+                    <td>{{activite['NOMACTIVITE']}}</td>
+                    <td>{{activite['PRIXACTIVITE']}}€</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Montant total</td>
+                    <td>{{total}}€</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    
+    <div class="d-flex justify-content-between my-4">
+        <button type="submit" class="mt-2 btn btn-primary ml-auto">Valider</button>
+    </div>
+</form>
+
+{% endblock %}
+

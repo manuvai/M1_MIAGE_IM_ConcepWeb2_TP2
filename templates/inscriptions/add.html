@@ -4,12 +4,12 @@
 
 <h1>Inscription au congres {{congres['TITRECONGRES']}} (#{{congres['CODCONGRES']}})</h1>
 
-<form action="{{url_for("inscriptions_new")}}" method="post">
+<form action="{{url_for("inscriptions_confirm")}}" method="post">
     <input type="hidden" name="CODCONGRES" value="{{congres['CODCONGRES']}}">
     <h2>Liste des thématiques</h2>
     {% for thematique in list_thematiques %}
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="THEMATIQUES" id="THEMATIQUE_{{thematique['CODETHEMATIQUE']}}">
+            <input class="form-check-input" type="checkbox" name="CODESTHEMATIQUES" id="THEMATIQUE_{{thematique['CODETHEMATIQUE']}}" value="{{thematique['CODETHEMATIQUE']}}">
             <label class="form-check-label" for="THEMATIQUE_{{thematique['CODETHEMATIQUE']}}">
             {{thematique['NOMTHEMATIQUE']}}
             </label>
@@ -19,7 +19,7 @@
     <h2>Liste des activités</h2>
     {% for activite in list_activites %}
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="ACTIVITES" id="ACTIVITE_{{activite['CODEACTIVITE']}}">
+            <input class="form-check-input" type="checkbox" name="CODESACTIVITES" id="ACTIVITE_{{activite['CODEACTIVITE']}}" value="{{activite['CODEACTIVITE']}}">
             <label class="form-check-label" for="ACTIVITE_{{activite['CODEACTIVITE']}}">
             {{activite['NOMACTIVITE']}}
             </label>

@@ -99,7 +99,9 @@ class Database:
             cursor = self.connection.cursor()
             if (values is None):
                 exec_data = cursor.execute(query)
-            else:
+            elif (isinstance(values, list)):
+                exec_data = cursor.executemany(query, values)
+            else :
                 exec_data = cursor.execute(query, values)
             self.connection.commit()
             return cursor.lastrowid
