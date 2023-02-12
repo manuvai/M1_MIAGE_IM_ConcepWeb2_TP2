@@ -139,8 +139,9 @@ def participants_add():
 
     list_statuts = statutsTable.all()
 
-    return render_template('participants/add.html', list_statuts=list_statuts)
-    
+    form_url = url_for("participants_new")
+    return render_template('participants/add.html', form_url=form_url, list_statuts=list_statuts)
+ 
 @app.route("/participants/new", methods=["POST"])
 def participants_new():
     v = ParticipantAddValidator(request.form)
@@ -177,6 +178,67 @@ def participants_new():
 
     return render_template('participants/new.html', errors=errors, is_valid=is_valid)
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    user = None
+    errors = []
+
+    table = ParticipantsTable(Database.get_instance())
+    if (request.method == 'POST'):
+        v = ConnectionValidator(request.form, table)
+        errors = v.validate()
+        if (len(errors) <= 0):
+            user = table.find_by_email(request.form.get('email'))[0]
+            session['user_id'] = user['CODPARTICIPANT']
+            return redirect(url_for('index'))
+
+    return render_template('login/signin.html', errors=errors)
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    errors = []
+    if (request.method == 'POST'):
+        v = ParticipantAddValidator(request.form)
+
+        errors = v.validate()
+
+        is_valid = len(errors) == 0
+
+        is_already_registered = find_participant_by_email(request.form.get('EMAILPART'))
+        if (len(is_already_registered) > 0):
+            is_valid = False
+            errors.append("L'utilisateur ayant pour email {} est déjà inscrit. Veuillez réessayer".format(request.form.get('EMAILPART')))
+
+        if (is_valid):
+            
+            x = datetime.datetime.now()
+            now_date = x.strftime("%Y-%m-%d")
+
+            values = []
+            values.append(request.form.get('CODESTATUT'))
+            values.append(request.form.get('NOMPART'))
+            values.append(request.form.get('PRENOMPART'))
+            values.append(request.form.get('ORGANISMEPART'))
+            values.append(request.form.get('CPPART'))
+            values.append(request.form.get('ADRPART'))
+            values.append(request.form.get('VILLEPART'))
+            values.append(request.form.get('PAYSPART'))
+            values.append(request.form.get('EMAILPART'))
+            values.append(now_date)
+
+            participantsTable = ParticipantsTable(Database.get_instance())
+
+            participantsTable.insert_line(values)
+
+            return redirect(url_for('login'))
+
+    statutsTable = StatutsTable(Database.get_instance())
+
+    list_statuts = statutsTable.all()
+
+    form_url = url_for("register")
+    return render_template('login/register.html', form_url=form_url, list_statuts=list_statuts, errors=errors)
+   
 @app.route("/inscriptions/search")
 def inscriptions_search():
     return render_template('inscriptions/search.html')
