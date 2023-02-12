@@ -1,0 +1,13 @@
+{% extends "layouts/default.html" %}
+
+{% block title %}Gestion du compte{% endblock %}
+
+{% set form_url, buttonText = url_for("manage_account"), "Enregistrer" %}
+
+{% block pageContent %}
+<h1>Gestion du compte</h1>
+
+{% include "common/_participant_form.html" %}
+
+
+{% endblock %}

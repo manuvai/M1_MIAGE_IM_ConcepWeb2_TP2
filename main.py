@@ -135,12 +135,13 @@ def participants_list():
 
 @app.route("/participants/add")
 def participants_add():
+    participant = dict()
     statutsTable = StatutsTable(Database.get_instance())
 
     list_statuts = statutsTable.all()
 
     form_url = url_for("participants_new")
-    return render_template('participants/add.html', form_url=form_url, list_statuts=list_statuts)
+    return render_template('participants/add.html', participant=participant, form_url=form_url, list_statuts=list_statuts)
  
 @app.route("/participants/new", methods=["POST"])
 def participants_new():
@@ -197,6 +198,7 @@ def login():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     errors = []
+    participant = dict()
     if (request.method == 'POST'):
         v = ParticipantAddValidator(request.form)
 
@@ -237,8 +239,22 @@ def register():
     list_statuts = statutsTable.all()
 
     form_url = url_for("register")
-    return render_template('login/register.html', form_url=form_url, list_statuts=list_statuts, errors=errors)
+    return render_template('login/register.html', participant=participant, form_url=form_url, list_statuts=list_statuts, errors=errors)
    
+@app.route('/manage_account', methods=['GET', 'POST'])
+def manage_account():
+    if (not auth()):
+        return redirect(url_for('login'))
+
+    statutsTable = StatutsTable(Database.get_instance())
+
+    list_statuts = statutsTable.all()
+
+    participantsTable = ParticipantsTable(Database.get_instance())
+    participant = participantsTable.find_by_code(session.get('user_id'))[0]
+
+    return render_template('account/edit.html', participant=participant, list_statuts=list_statuts)
+
 @app.route("/inscriptions/search")
 def inscriptions_search():
     return render_template('inscriptions/search.html')
