@@ -2,7 +2,7 @@
 @author: manuvai.rehua@ut-capitole.fr
 """
 
-from AbstractValidator import AbstractValidator
+from .AbstractValidator import AbstractValidator
 from Database import Database
 from Table.ParticipantsTable import ParticipantsTable
 

@@ -11,9 +11,9 @@ from Table.ProposerTable import ProposerTable
 from Table.InscrireTable import InscrireTable
 from Table.ChoixActivitesTable import ChoixActivitesTable
 from Table.ChoixThematiquesTable import ChoixThematiquesTable
-from CongresAddValidator import CongresAddValidator
-from ParticipantAddValidator import ParticipantAddValidator
-from ConnectionValidator import ConnectionValidator
+from Validator.CongresAddValidator import CongresAddValidator
+from Validator.ParticipantAddValidator import ParticipantAddValidator
+from Validator.ConnectionValidator import ConnectionValidator
 from utils import *
 from flask import Flask, request, session, redirect, url_for
 from flask import render_template

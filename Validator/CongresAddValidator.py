@@ -2,7 +2,7 @@
 @author: manuvai.rehua@ut-capitole.fr
 """
 
-from AbstractValidator import AbstractValidator
+from .AbstractValidator import AbstractValidator
 
 class CongresAddValidator(AbstractValidator):
     def __init__(self, data: any):
