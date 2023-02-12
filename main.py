@@ -1,23 +1,22 @@
 import datetime
-import sqlite3
 from Database import Database
+
 from Table.CongresTable import CongresTable
 from Table.ActivitesTable import ActivitesTable
 from Table.ThematiquesTable import ThematiquesTable
 from Table.ParticipantsTable import ParticipantsTable
 from Table.StatutsTable import StatutsTable
-from Table.TraiterTable import TraiterTable
-from Table.ProposerTable import ProposerTable
 from Table.InscrireTable import InscrireTable
 from Table.ChoixActivitesTable import ChoixActivitesTable
 from Table.ChoixThematiquesTable import ChoixThematiquesTable
+
 from Validator.CongresAddValidator import CongresAddValidator
 from Validator.ParticipantAddValidator import ParticipantAddValidator
 from Validator.ConnectionValidator import ConnectionValidator
+
 from utils import *
 from flask import Flask, request, session, redirect, url_for
 from flask import render_template
-import re
 
 app = Flask(__name__)
 
