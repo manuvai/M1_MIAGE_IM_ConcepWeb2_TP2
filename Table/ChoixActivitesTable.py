@@ -3,7 +3,7 @@
 """
 
 from Database import Database
-from AbstractTable import AbstractTable
+from .AbstractTable import AbstractTable
 
 class ChoixActivitesTable(AbstractTable):
 

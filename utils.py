@@ -2,12 +2,12 @@
 @author: manuvai.rehua@ut-capitole.fr
 """
 
-from ActivitesTable import ActivitesTable
+from Table.ActivitesTable import ActivitesTable
 from Database import Database
-from ThematiquesTable import ThematiquesTable
-from TraiterTable import TraiterTable
-from ParticipantsTable import ParticipantsTable
-from ProposerTable import ProposerTable
+from Table.ThematiquesTable import ThematiquesTable
+from Table.TraiterTable import TraiterTable
+from Table.ParticipantsTable import ParticipantsTable
+from Table.ProposerTable import ProposerTable
 from flask import session
 
 def find_activites(ids: list) -> list:

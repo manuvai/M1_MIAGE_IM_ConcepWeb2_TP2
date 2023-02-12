@@ -70,3 +70,6 @@ class AbstractTable:
         )
 
         return self.db.execute_query(query, values)
+
+if (__name__ == '__main__'):
+    table = AbstractTable(Database.get_instance())

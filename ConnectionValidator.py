@@ -4,7 +4,7 @@
 
 from AbstractValidator import AbstractValidator
 from Database import Database
-from ParticipantsTable import ParticipantsTable
+from Table.ParticipantsTable import ParticipantsTable
 
 class ConnectionValidator(AbstractValidator):
     _stop_on_first_error = True

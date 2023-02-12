@@ -1,16 +1,16 @@
 import datetime
 import sqlite3
 from Database import Database
-from CongresTable import CongresTable
-from ActivitesTable import ActivitesTable
-from ThematiquesTable import ThematiquesTable
-from ParticipantsTable import ParticipantsTable
-from StatutsTable import StatutsTable
-from TraiterTable import TraiterTable
-from ProposerTable import ProposerTable
-from InscrireTable import InscrireTable
-from ChoixActivitesTable import ChoixActivitesTable
-from ChoixThematiquesTable import ChoixThematiquesTable
+from Table.CongresTable import CongresTable
+from Table.ActivitesTable import ActivitesTable
+from Table.ThematiquesTable import ThematiquesTable
+from Table.ParticipantsTable import ParticipantsTable
+from Table.StatutsTable import StatutsTable
+from Table.TraiterTable import TraiterTable
+from Table.ProposerTable import ProposerTable
+from Table.InscrireTable import InscrireTable
+from Table.ChoixActivitesTable import ChoixActivitesTable
+from Table.ChoixThematiquesTable import ChoixThematiquesTable
 from CongresAddValidator import CongresAddValidator
 from ParticipantAddValidator import ParticipantAddValidator
 from ConnectionValidator import ConnectionValidator

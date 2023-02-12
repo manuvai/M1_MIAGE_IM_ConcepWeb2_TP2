@@ -2,7 +2,7 @@
 @author: manuvai.rehua@ut-capitole.fr
 """
 
-from AbstractTable import AbstractTable
+from .AbstractTable import AbstractTable
 
 class ProposerTable(AbstractTable):
 
