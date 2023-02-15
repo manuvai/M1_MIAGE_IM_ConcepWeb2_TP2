@@ -10,6 +10,15 @@ class InscrireTable(AbstractTable):
     _table_name = 'inscrire'
 
     def insert_line(self, codParticipant: int, codCongres: int):
+        """Surcharge de la méthode parente avec les noms de colonne spécifiés
+
+        Args:
+            codParticipant (int): _description_
+            codCongres (int): _description_
+
+        Returns:
+            _type_: _description_
+        """
         columns = [
             'CODPARTICIPANT',
             'CODCONGRES',

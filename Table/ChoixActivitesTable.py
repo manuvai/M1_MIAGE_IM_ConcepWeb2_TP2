@@ -10,6 +10,14 @@ class ChoixActivitesTable(AbstractTable):
     _table_name = 'choix_activites'
 
     def insert_lines(self, codParticipant: int, codCongres: int, codeActivites: list):
+        """Surcharge de la méthode parente avec les colonnes préremplies
+
+        Args:
+            codParticipant (int): L'identifiant du participant
+            codCongres (int): L'identifiant du congres
+            codeActivites (list): La liste des activités choisies
+
+        """
         columns = [
             'CODPARTICIPANT',
             'CODCONGRES',

@@ -8,10 +8,20 @@ class ThematiquesTable(AbstractTable):
     _table_name = 'thematiques'
     
     def find_by_ids(self, ids: list):
+        """Surcharge de la méthode parente avec les noms de colonne spécifiés
+
+        Args:
+            ids (list): La liste des valeurs à chercher
+
+        """
         
         return super().find_by_ids(ids, 'codeThematique')
 
     def find_for_congres(self, congres_id: int):
+        """Récupération des thématiques liées à un congres
+        
+        """
+        
         query = """
         SELECT t.*
         FROM congres c, thematiques t, traiter tr
@@ -23,6 +33,9 @@ class ThematiquesTable(AbstractTable):
         return self.db.execute_read_query(query, (congres_id,))
 
     def find_by_congres_participants(self, congres_id: int, participant_email: str):
+        """Récupération des thématiques auxquel un participant est inscrit
+        
+        """
         
         query = """
         SELECT t.*

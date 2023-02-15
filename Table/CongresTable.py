@@ -10,6 +10,12 @@ class CongresTable(AbstractTable):
     _table_name = 'congres'
 
     def find_by_code(self, code: int):
+        """Surcharge de la méthode parente avec la colonne spécifiée
+
+        Args:
+            code (int): L'identifiant du congres
+
+        """
         return super().find_by_key('CODCONGRES', (code,))
 
     # TODO 1. Afficher la liste des inscriptions de l'utilisateur.
@@ -17,6 +23,10 @@ class CongresTable(AbstractTable):
     # TODO 3. Vérifier que l'utilisateur n'a pas de soucis
 
     def find_participant_tarif(self, congres_id, participant_id):
+        """Récupération des tarifs correspondant à un participant pour un congres donné
+        
+        """
+        
         query = """
         SELECT tar.montantTarif
         FROM congres c, tarifs tar, statuts s, participants p
@@ -31,6 +41,9 @@ class CongresTable(AbstractTable):
         return response
 
     def find_by_participant_email(self, email: str):
+        """Récupération d'un congres d'un participant par son email
+        
+        """
         
         query = """
         SELECT c.*
@@ -45,6 +58,12 @@ class CongresTable(AbstractTable):
         return list_congres
         
     def insert_line(self, values: list):
+        """Surcharge de la méthode parente avec les colonnes spécifiées
+
+        Args:
+            values (list): La liste des valeurs à insérer
+
+        """
         columns = [
             'TITRECONGRES',
             'NUMEDITIONCONGRES',
