@@ -13,7 +13,7 @@ class CongresTable(AbstractTable):
         return super().find_by_key('CODCONGRES', (code,))
 
     # TODO 1. Afficher la liste des inscriptions de l'utilisateur.
-    # TODO 2. Vérifier que l'utilisateur n'est pas déjà inscrit
+    # TODO 2. Faire la vérification des données entrées + Mettre à jour les informations de l'utilisateur
     # TODO 3. Vérifier que l'utilisateur n'a pas de soucis
 
     def find_participant_tarif(self, congres_id, participant_id):
