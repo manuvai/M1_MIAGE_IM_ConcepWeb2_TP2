@@ -18,9 +18,9 @@ class CongresTable(AbstractTable):
         """
         return super().find_by_key('CODCONGRES', (code,))
 
-    # TODO 1. Afficher la liste des inscriptions de l'utilisateur.
-    # TODO 2. Faire la vérification des données entrées + Mettre à jour les informations de l'utilisateur
-    # TODO 3. Vérifier que l'utilisateur n'a pas de soucis
+    # TODO 1. Faire la vérification des données entrées + Mettre à jour les informations de l'utilisateur
+    # TODO 2. Vérifier que l'utilisateur n'a pas de soucis
+    # TODO 3. Vérifier le nombre d'inscrits
 
     def find_participant_tarif(self, congres_id, participant_id):
         """Récupération des tarifs correspondant à un participant pour un congres donné
@@ -37,7 +37,6 @@ class CongresTable(AbstractTable):
             AND c.codCongres = ?
         """
         response = self.db.execute_read_query(query, (participant_id, congres_id,))
-        print(response)
         return response
 
     def find_by_participant_email(self, email: str):
@@ -55,6 +54,26 @@ class CongresTable(AbstractTable):
 
         list_congres = self.db.execute_read_query(query, (email,))
 
+        return list_congres
+    
+    def find_where_participant_unregistered(self, user_id: int):
+        """Récupération des congres que l'utilisateur n'est pas inscrit
+
+        Args:
+            user_id (int): L'identifiant d'un utilisateur
+        """
+
+        query = """
+        SELECT c1.*
+        FROM congres c1
+        WHERE c1.codCongres NOT IN (
+            SELECT c2.codCongres
+            FROM congres c2, inscrire i
+            WHERE c2.codCongres = i.codCongres
+                AND i.codParticipant = ?
+        )
+        """
+        list_congres = self.db.execute_read_query(query, (user_id,))
         return list_congres
         
     def insert_line(self, values: list):

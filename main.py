@@ -27,6 +27,7 @@ def index():
     user = None
     errors = []
     list_congres = []
+    user_congres = []
 
     table = ParticipantsTable(Database.get_instance())
     if (request.method == 'POST'):
@@ -41,11 +42,16 @@ def index():
         user = table.find_by_code(session.get('user_id'))[0]
         table = CongresTable(Database.get_instance())
 
-        list_congres = table.all()
+        user_id = int(user.get('CODPARTICIPANT'))
+        
+        user_congres = table.find_by_participant_email(user.get('EMAILPART'))
+        
+        list_congres = table.find_where_participant_unregistered(user_id)
     
     return render_template('home/index.html', \
         errors=errors, user=user, \
-        list_congres=list_congres)
+        list_congres=list_congres, \
+        user_congres=user_congres)
 
 @app.route("/logout", methods=['POST'])
 def logout():

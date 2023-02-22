@@ -6,6 +6,27 @@
     </p>
 </div>
 
+{% if user_congres %}
+<span class="h3">La liste de vos inscriptions</span>
+<table class="table table-striped table-inverse table-responsive">
+    <thead class="thead-inverse">
+        <tr>
+            <th>ID</th>
+            <th>Nom</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in user_congres %}
+            <tr>
+                <td scope="row">{{c['CODCONGRES']}}</td>
+                <td>{{c['TITRECONGRES']}}</td>
+            </tr>
+        
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
 <span class="h3">Choisissez un congres</span>
 
 <table class="table table-striped table-inverse table-responsive">
