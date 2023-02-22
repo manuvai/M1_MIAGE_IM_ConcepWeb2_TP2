@@ -13,6 +13,7 @@ from Table.ChoixThematiquesTable import ChoixThematiquesTable
 from Validator.CongresAddValidator import CongresAddValidator
 from Validator.ParticipantAddValidator import ParticipantAddValidator
 from Validator.ConnectionValidator import ConnectionValidator
+from Validator.ParticipantUpdateValidator import ParticipantUpdateValidator
 
 from utils import *
 from flask import Flask, request, session, redirect, url_for
@@ -251,15 +252,44 @@ def register():
 def manage_account():
     if (not auth()):
         return redirect(url_for('login'))
+    
+    errors = []
+    participantsTable = ParticipantsTable(Database.get_instance())
+    participant = participantsTable.find_by_code(session.get('user_id'))[0]
+
+    if (request.method == 'POST'):
+        v = ParticipantUpdateValidator(request.form)
+
+        errors = v.validate()
+
+        is_valid = len(errors) == 0
+
+        if (is_valid):
+            # participantsTable
+            values = []
+            values.append(request.form.get('CODESTATUT'))
+            values.append(request.form.get('NOMPART'))
+            values.append(request.form.get('PRENOMPART'))
+            values.append(request.form.get('ORGANISMEPART'))
+            values.append(request.form.get('CPPART'))
+            values.append(request.form.get('ADRPART'))
+            values.append(request.form.get('VILLEPART'))
+            values.append(request.form.get('PAYSPART'))
+            values.append(request.form.get('EMAILPART'))
+
+            participantsTable.update(participant.get('CODPARTICIPANT'), values)
+
+            return redirect(url_for('manage_account'))
+
 
     statutsTable = StatutsTable(Database.get_instance())
 
     list_statuts = statutsTable.all()
 
-    participantsTable = ParticipantsTable(Database.get_instance())
-    participant = participantsTable.find_by_code(session.get('user_id'))[0]
-
-    return render_template('account/edit.html', participant=participant, list_statuts=list_statuts)
+    return render_template('account/edit.html', \
+        participant=participant, \
+        list_statuts=list_statuts, \
+        errors=errors)
 
 @app.route("/inscriptions/search")
 def inscriptions_search():

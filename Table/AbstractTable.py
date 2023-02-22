@@ -108,6 +108,33 @@ class AbstractTable:
         )
 
         return self.db.execute_query(query, values)
+    
+    def update(self, id: str, key: str, values: list, columns: list):
+        """_summary_
+
+        Args:
+            id (str): _description_
+            key (str): _description_
+            values (list): _description_
+            columns (list): _description_
+        """
+
+        query = """
+        UPDATE {table_name}
+        SET {assignations}
+        WHERE {key} = {id}
+        """
+        columns = [f"{column} = ?" for column in columns]
+        assignations = ', '.join(columns)
+
+        query = query.format(
+            table_name = self.table_name,
+            assignations = assignations,
+            key = key,
+            id = id
+        )
+
+        return self.db.execute_query(query, tuple(values))
 
 if (__name__ == '__main__'):
     table = AbstractTable(Database.get_instance())

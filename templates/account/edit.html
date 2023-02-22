@@ -7,6 +7,13 @@
 {% block pageContent %}
 <h1>Gestion du compte</h1>
 
+{% if errors %}
+<div class="alert alert-danger" role="alert">
+    {% for error in errors %}
+        <div>{{error}}</div>
+    {% endfor %}
+</div>
+{% endif %}
 {% include "common/_participant_form.html" %}
 
 

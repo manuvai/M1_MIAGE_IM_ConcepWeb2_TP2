@@ -31,6 +31,28 @@ class ParticipantsTable(AbstractTable):
         response = self.find_by_key('EMAILPART', (value,))
 
         return response
+    
+    def update(self, code: str, values: list):
+        """_summary_
+
+        Args:
+            code (str): _description_
+            values (list): _description_
+        """
+        
+        columns = [
+            'CODESTATUT',
+            'NOMPART',
+            'PRENOMPART',
+            'ORGANISMEPART',
+            'CPPART',
+            'ADRPART',
+            'VILLEPART',
+            'PAYSPART',
+            'EMAILPART',
+        ]
+
+        return super().update(code, 'CODPARTICIPANT', values, columns)
 
     def insert_line(self, values: list):
         """Surcharge de la méthode parente avec les noms de colonne spécifiés
