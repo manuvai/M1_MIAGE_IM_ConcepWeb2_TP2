@@ -18,7 +18,6 @@ class CongresTable(AbstractTable):
         """
         return super().find_by_key('CODCONGRES', (code,))
 
-    # TODO 1. Faire la vérification des données entrées + Mettre à jour les informations de l'utilisateur
     # TODO 2. Vérifier que l'utilisateur n'a pas de soucis
     # TODO 3. Vérifier le nombre d'inscrits
 
