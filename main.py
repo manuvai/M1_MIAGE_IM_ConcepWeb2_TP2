@@ -265,7 +265,6 @@ def manage_account():
         is_valid = len(errors) == 0
 
         if (is_valid):
-            # participantsTable
             values = []
             values.append(request.form.get('CODESTATUT'))
             values.append(request.form.get('NOMPART'))
@@ -319,6 +318,9 @@ def inscriptions_list():
 def inscriptions_add(congres_id):
     db = Database.get_instance()
 
+    if (not auth()):
+        return redirect(url_for('login'))
+
     thematiquesTable = ThematiquesTable(db)
     activitesTable = ActivitesTable(db)
     congresTable = CongresTable(db)
@@ -332,6 +334,9 @@ def inscriptions_add(congres_id):
 @app.route("/inscriptions/confirm", methods=['POST'])
 def inscriptions_confirm():
     db = Database.get_instance()
+    
+    if (not auth()):
+        return redirect(url_for('login'))
 
     congresTable = CongresTable(db)
     
