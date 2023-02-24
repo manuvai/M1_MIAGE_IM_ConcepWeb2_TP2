@@ -28,6 +28,13 @@ class ActivitesTable(AbstractTable):
         WHERE c.codCongres = p.codCongres
             AND p.codeActivite = a.codeActivite
             AND c.codCongres = ?
+            AND a.codeActivite NOT IN (
+                SELECT a2.codeActivite
+                FROM activites a2, choix_activites ca
+                WHERE a2.codeActivite = ca.codeActivite
+                GROUP BY a2.codeActivite
+                HAVING COUNT(a2.codeActivite) >= a2.nbMaxParticipants
+            )
         """
 
         return self.db.execute_read_query(query, (congres_id,))
