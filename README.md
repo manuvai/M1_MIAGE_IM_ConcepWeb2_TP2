@@ -6,6 +6,23 @@ Lien vers le dépôt Github : https://github.com/manuvai/M1_MIAGE_IM_ConcepWeb2_
 Nom : REHUA
 Prénom : Manuvai
 
+## Requirements
+Avant de lancer l'application web, il faudra disposer de certains modules.
+Pour ce faire, vous pouvez installer les dépendances en exécutant :
+```bash
+pip install -r requirements.txt
+```
+
+## Lancement
+Pour pouvoir lancer l'application vous devrez exécuter :
+```bash
+python main.py
+```
+ou 
+```bash
+py main.py
+```
+
 ## Description
 Ce dépôt contient les sources pour réaliser le TP2 de Conception Web 2 du deuxième semestre du Master M1 MIAGE IM.
 
