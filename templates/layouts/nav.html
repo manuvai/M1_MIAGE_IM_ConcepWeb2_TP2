@@ -17,11 +17,14 @@
                     <a class="nav-link" href="{{url_for("participants_add")}}">Créer un compte participant</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{url_for("participants_add")}}?prepared=1">Créer un compte participant (Requète non
+                        paramétrée)</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{url_for("inscriptions_search")}}">Consultation des inscriptions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{url_for("congres_add")}}">Création d'un nouveau congrès (Requète
-                        paramétrée)</a>
+                    <a class="nav-link" href="{{url_for("congres_add")}}">Création d'un nouveau congrès </a>
                 </li>
                 {% if session.get('user_id') %}
                     <li class="nav-item">
