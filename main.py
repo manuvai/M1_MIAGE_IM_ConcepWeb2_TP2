@@ -146,9 +146,9 @@ def participants_add():
     statutsTable = StatutsTable(Database.get_instance())
 
     additionnalsParams = {}
-    preparedRequest = request.args.get("prepared")
-    if (not preparedRequest is None and preparedRequest == "1"):
-        additionnalsParams['prepared'] = preparedRequest
+    manualRequest = request.args.get("not-prepared")
+    if (not manualRequest is None and manualRequest == "1"):
+        additionnalsParams['not-prepared'] = manualRequest
 
     list_statuts = statutsTable.all()
 
@@ -187,7 +187,8 @@ def participants_new():
 
         participantsTable = ParticipantsTable(Database.get_instance())
 
-        participantsTable.insert_line(values)
+        is_prepared = request.form.get('not-prepared', False) != '1'
+        participantsTable.insert_participant(values, is_prepared)
 
     return render_template('participants/new.html', errors=errors, is_valid=is_valid)
 

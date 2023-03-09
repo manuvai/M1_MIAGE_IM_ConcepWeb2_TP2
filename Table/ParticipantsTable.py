@@ -54,6 +54,38 @@ class ParticipantsTable(AbstractTable):
 
         return super().update(code, 'CODPARTICIPANT', values, columns)
 
+    def insert_participant(self, values: list, is_prepared: bool):
+        if (is_prepared):
+            return self.insert_line(values)
+        
+        columns = [
+            'CODESTATUT',
+            'NOMPART',
+            'PRENOMPART',
+            'ORGANISMEPART',
+            'CPPART',
+            'ADRPART',
+            'VILLEPART',
+            'PAYSPART',
+            'EMAILPART',
+            'DTINSCRIPTION',
+        ]
+        values_str = ", ".join(values)
+
+        columns_str = ", ".join(columns)
+
+        query = """
+            INSERT INTO {table_name} ({columns_str}) VALUES 
+                ({values_str})
+        """
+        query = query.format(
+            table_name=self.table_name, 
+            columns_str=columns_str, 
+            values_str=values_str
+        )
+
+        return self.db.execute_query(query)
+
     def insert_line(self, values: list):
         """Surcharge de la méthode parente avec les noms de colonne spécifiés
 
