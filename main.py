@@ -145,10 +145,15 @@ def participants_add():
     participant = dict()
     statutsTable = StatutsTable(Database.get_instance())
 
+    additionnalsParams = {}
+    preparedRequest = request.args.get("prepared")
+    if (not preparedRequest is None and preparedRequest == "1"):
+        additionnalsParams['prepared'] = preparedRequest
+
     list_statuts = statutsTable.all()
 
     form_url = url_for("participants_new")
-    return render_template('participants/add.html', participant=participant, form_url=form_url, list_statuts=list_statuts)
+    return render_template('participants/add.html', participant=participant, form_url=form_url, list_statuts=list_statuts, additionnalsParams=additionnalsParams)
  
 @app.route("/participants/new", methods=["POST"])
 def participants_new():

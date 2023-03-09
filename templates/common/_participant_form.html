@@ -1,5 +1,11 @@
 
 <form action="{{form_url}}" method="post">
+
+    {% if (additionnalsParams) %}
+        {% for key, value in additionnalsParams.items() %}
+            <input type="hidden" name="{{key}}" value="{{value}}">
+        {% endfor %}
+    {% endif %}
     <div>
         {% for statut in list_statuts %}
             <div class="form-check">
