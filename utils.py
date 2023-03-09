@@ -89,7 +89,7 @@ def add_proposer_line(activites_ids: list, congres_id: int):
     proposerTable = ProposerTable(Database.get_instance())
     proposerTable.insert_lines(values)
 
-def find_participant_by_email(email: str) -> dict|None:
+def find_participant_by_email(email: str) -> any:
     participantsTable = ParticipantsTable(Database.get_instance())
     
     return participantsTable.find_by_email(email)
