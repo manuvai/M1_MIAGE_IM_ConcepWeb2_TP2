@@ -70,6 +70,8 @@ class ParticipantsTable(AbstractTable):
             'EMAILPART',
             'DTINSCRIPTION',
         ]
+
+        values = [f"'{value}'" for value in values]
         values_str = ", ".join(values)
 
         columns_str = ", ".join(columns)
